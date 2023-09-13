@@ -1,0 +1,28 @@
+version: '3'
+services:
+  # Serviço PHP
+  php:
+    image: php:8.0-fpm
+    container_name: series_laravel
+    volumes:
+      - .:/var/www/html
+    networks:
+      - app-network
+
+  # Serviço Nginx
+  nginx:
+    image: nginx:latest
+    container_name: series_nginx
+    ports:
+      - "80:80"
+    volumes:
+      - .:/var/www/html
+      - ./nginx/conf:/etc/nginx/conf.d
+    depends_on:
+      - php
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
